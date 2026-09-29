@@ -1,0 +1,325 @@
+date,libelle,montant,categorie
+2025-10-05,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2025-10-07,Petit outillage,-148.15,Frais generaux
+2025-10-09,Loyer entrepot,-10500.00,Loyer
+2025-10-09,Entretien local,-148.77,Frais generaux
+2025-10-10,Emprunts (vehicules + local),-11600.00,Emprunt
+2025-10-10,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2025-10-15,Assurance professionnelle,-950.00,Frais generaux
+2025-10-18,Entretien local,-189.18,Frais generaux
+2025-10-24,Frais divers exploitation,-237.60,Frais generaux
+2025-11-02,Fournitures de bureau,-395.41,Frais generaux
+2025-11-04,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2025-11-04,Entretien local,-248.86,Frais generaux
+2025-11-06,Paiement facture FF2025100013 - Materiel Pro Distribution,-29489.21,Paiement fournisseur
+2025-11-08,Reglement facture FC2025100085 - Techno Bat,7436.49,Encaissement client
+2025-11-09,Emprunts (vehicules + local),-11600.00,Emprunt
+2025-11-09,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2025-11-11,Reglement facture FC2025100013 - Dupont Materiaux,19312.12,Encaissement client
+2025-11-11,Reglement facture FC2025100049 - Bernard Fils,9922.51,Encaissement client
+2025-11-11,Paiement facture FF2025100061 - Emballages Dupuis,-2132.29,Paiement fournisseur
+2025-11-12,Reglement facture FC2025100139 - Central Bricolage,3425.03,Encaissement client
+2025-11-12,Paiement facture FF2025100037 - EnerFret,-2452.33,Paiement fournisseur
+2025-11-12,Entretien local,-252.29,Frais generaux
+2025-11-14,Assurance professionnelle,-950.00,Frais generaux
+2025-11-16,Reglement facture FC2025100061 - Distri Ouest,15702.88,Encaissement client
+2025-11-17,Reglement facture FC2025100163 - Vallee Distribution,3576.82,Encaissement client
+2025-11-17,Paiement facture FF2025100038 - EnerFret,-2402.65,Paiement fournisseur
+2025-11-19,Reglement facture FC2025100091 - Marchand Freres,9537.70,Encaissement client
+2025-11-20,Reglement facture FC2025100115 - Alpha Fournitures,4316.13,Encaissement client
+2025-11-21,Reglement facture FC2025100037 - Groupe Charpentier,11503.19,Encaissement client
+2025-11-22,Reglement facture FC2025100001 - Meunier Negoce,15435.06,Encaissement client
+2025-11-23,Frais bancaires,-152.15,Frais generaux
+2025-11-25,Paiement facture FF2025100073 - Outillage Services,-1377.92,Paiement fournisseur
+2025-11-25,Frais bancaires,-420.17,Frais generaux
+2025-11-27,Reglement facture FC2025100103 - Rousseau Negoce,6228.16,Encaissement client
+2025-11-29,Paiement facture FF2025100025 - Trans Log Express,-9755.17,Paiement fournisseur
+2025-11-30,Reglement facture FC2025100127 - Nord Equipement,10713.43,Encaissement client
+2025-12-01,Frais bancaires,-242.07,Frais generaux
+2025-12-02,Reglement facture FC2025100073 - Petit & Cie,6654.91,Encaissement client
+2025-12-03,Reglement facture FC2025100140 - Central Bricolage,3678.26,Encaissement client
+2025-12-04,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2025-12-05,Paiement facture FF2025110062 - Emballages Dupuis,-2152.65,Paiement fournisseur
+2025-12-08,Reglement facture FC2025110141 - Central Bricolage,2936.60,Encaissement client
+2025-12-09,Reglement facture FC2025110014 - Dupont Materiaux,24293.46,Encaissement client
+2025-12-09,Emprunts (vehicules + local),-11600.00,Emprunt
+2025-12-09,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2025-12-11,Paiement facture FF2025110039 - EnerFret,-2081.80,Paiement fournisseur
+2025-12-12,Reglement facture FC2025110002 - Meunier Negoce,16505.34,Encaissement client
+2025-12-12,Reglement facture FC2025110164 - Vallee Distribution,4580.72,Encaissement client
+2025-12-14,Reglement facture FC2025110038 - Groupe Charpentier,10527.27,Encaissement client
+2025-12-14,Assurance professionnelle,-950.00,Frais generaux
+2025-12-15,Reglement facture FC2025100025 - SARL Lefevre Equipements,15491.09,Encaissement client
+2025-12-15,Reglement facture FC2025110074 - Petit & Cie,5209.10,Encaissement client
+2025-12-15,Reglement facture FC2025110128 - Nord Equipement,10857.19,Encaissement client
+2025-12-15,Paiement facture FF2025110014 - Materiel Pro Distribution,-29795.55,Paiement fournisseur
+2025-12-16,Reglement facture FC2025110116 - Alpha Fournitures,5205.67,Encaissement client
+2025-12-16,Paiement facture FF2025100001 - Global Import SA,-46013.87,Paiement fournisseur
+2025-12-16,Frais divers exploitation,-274.20,Frais generaux
+2025-12-19,Reglement facture FC2025110092 - Marchand Freres,12159.43,Encaissement client
+2025-12-23,Reglement facture FC2025110062 - Distri Ouest,14180.82,Encaissement client
+2025-12-23,Paiement facture FF2025110040 - EnerFret,-2076.48,Paiement fournisseur
+2025-12-24,Reglement facture FC2025110050 - Bernard Fils,8062.67,Encaissement client
+2025-12-24,Paiement facture FF2025110026 - Trans Log Express,-8148.54,Paiement fournisseur
+2025-12-25,Frais divers exploitation,-138.47,Frais generaux
+2025-12-30,Reglement facture FC2025110104 - Rousseau Negoce,7796.47,Encaissement client
+2025-12-31,Reglement facture FC2025110026 - SARL Lefevre Equipements,13485.31,Encaissement client
+2025-12-31,Entretien local,-443.59,Frais generaux
+2025-12-31,Fournitures de bureau,-223.91,Frais generaux
+2026-01-02,Paiement facture FF2025120015 - Materiel Pro Distribution,-31997.35,Paiement fournisseur
+2026-01-02,Entretien local,-165.04,Frais generaux
+2026-01-03,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2026-01-03,Frais bancaires,-438.78,Frais generaux
+2026-01-04,Reglement facture FC2025120039 - Groupe Charpentier,10750.23,Encaissement client
+2026-01-04,Reglement facture FC2025120093 - Marchand Freres,11578.20,Encaissement client
+2026-01-04,Fournitures de bureau,-308.40,Frais generaux
+2026-01-05,Reglement facture FC2025110142 - Central Bricolage,2799.80,Encaissement client
+2026-01-07,Reglement facture FC2025120063 - Distri Ouest,15222.81,Encaissement client
+2026-01-08,Paiement facture FF2025120041 - EnerFret,-2140.31,Paiement fournisseur
+2026-01-08,Loyer entrepot,-10500.00,Loyer
+2026-01-08,Emprunts (vehicules + local),-11600.00,Emprunt
+2026-01-08,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2026-01-10,Paiement facture FF2025120063 - Emballages Dupuis,-2027.94,Paiement fournisseur
+2026-01-10,Paiement facture FF2025120074 - Outillage Services,-1557.54,Paiement fournisseur
+2026-01-12,Paiement facture FF2025110002 - Global Import SA,-44340.67,Paiement fournisseur
+2026-01-13,Reglement facture FC2025120117 - Alpha Fournitures,5361.85,Encaissement client
+2026-01-13,Assurance professionnelle,-950.00,Frais generaux
+2026-01-16,Reglement facture FC2025120143 - Central Bricolage,3472.83,Encaissement client
+2026-01-16,Paiement facture FF2025120027 - Trans Log Express,-9115.91,Paiement fournisseur
+2026-01-19,Petit outillage,-128.55,Frais generaux
+2026-01-23,Reglement facture FC2025120015 - Dupont Materiaux,24027.05,Encaissement client
+2026-01-25,Reglement facture FC2025120003 - Meunier Negoce,18954.18,Encaissement client
+2026-01-27,Reglement facture FC2025120165 - Vallee Distribution,3946.50,Encaissement client
+2026-01-30,Reglement facture FC2025120051 - Bernard Fils,9106.32,Encaissement client
+2026-01-31,Paiement facture FF2026010028 - Trans Log Express,-9256.95,Paiement fournisseur
+2026-01-31,Paiement facture FF2025120042 - EnerFret,-2100.51,Paiement fournisseur
+2026-02-01,Reglement facture FC2025120105 - Rousseau Negoce,6281.27,Encaissement client
+2026-02-01,Reglement facture FC2025120129 - Nord Equipement,10587.04,Encaissement client
+2026-02-02,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2026-02-03,Reglement facture FC2025120086 - Techno Bat,7484.60,Encaissement client
+2026-02-04,Reglement facture FC2025120144 - Central Bricolage,3187.98,Encaissement client
+2026-02-04,Frais bancaires,-515.73,Frais generaux
+2026-02-07,Reglement facture FC2025120027 - SARL Lefevre Equipements,17202.86,Encaissement client
+2026-02-07,Reglement facture FC2026010130 - Nord Equipement,10174.21,Encaissement client
+2026-02-07,Emprunts (vehicules + local),-11600.00,Emprunt
+2026-02-07,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2026-02-08,Frais bancaires,-296.82,Frais generaux
+2026-02-09,Reglement facture FC2025120075 - Petit & Cie,6541.07,Encaissement client
+2026-02-10,Paiement facture FF2026010043 - EnerFret,-2459.12,Paiement fournisseur
+2026-02-12,Assurance professionnelle,-950.00,Frais generaux
+2026-02-13,Reglement facture FC2026010040 - Groupe Charpentier,12347.07,Encaissement client
+2026-02-14,Reglement facture FC2026010094 - Marchand Freres,9745.63,Encaissement client
+2026-02-16,Reglement facture FC2026010145 - Central Bricolage,3639.52,Encaissement client
+2026-02-16,Paiement facture FF2026010016 - Materiel Pro Distribution,-32676.37,Paiement fournisseur
+2026-02-17,Paiement facture FF2025120003 - Global Import SA,-44513.22,Paiement fournisseur
+2026-02-18,Reglement facture FC2026010076 - Petit & Cie,5444.86,Encaissement client
+2026-02-18,Paiement facture FF2026010044 - EnerFret,-2285.41,Paiement fournisseur
+2026-02-20,Reglement facture FC2026010064 - Distri Ouest,16424.51,Encaissement client
+2026-02-20,Frais bancaires,-530.72,Frais generaux
+2026-02-23,Reglement facture FC2026010146 - Central Bricolage,3010.85,Encaissement client
+2026-02-24,Paiement facture FF2026010064 - Emballages Dupuis,-1934.56,Paiement fournisseur
+2026-02-25,Paiement facture FF2026010004 - Global Import SA,-48253.45,Paiement fournisseur
+2026-02-26,Reglement facture FC2026010118 - Alpha Fournitures,5091.36,Encaissement client
+2026-02-28,Reglement facture FC2026010052 - Bernard Fils,9267.15,Encaissement client
+2026-03-02,Reglement facture FC2026010016 - Dupont Materiaux,22239.11,Encaissement client
+2026-03-03,Reglement facture FC2026020065 - Distri Ouest,16997.64,Encaissement client
+2026-03-04,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2026-03-06,Reglement facture FC2026010004 - Meunier Negoce,15769.47,Encaissement client
+2026-03-07,Paiement facture FF2026020017 - Materiel Pro Distribution,-29282.29,Paiement fournisseur
+2026-03-07,Entretien local,-230.85,Frais generaux
+2026-03-09,Emprunts (vehicules + local),-11600.00,Emprunt
+2026-03-09,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2026-03-10,Reglement facture FC2026020119 - Alpha Fournitures,5667.58,Encaissement client
+2026-03-10,Reglement facture FC2026010166 - Vallee Distribution,4262.02,Encaissement client
+2026-03-10,Paiement facture FF2026020029 - Trans Log Express,-8427.11,Paiement fournisseur
+2026-03-10,Frais bancaires,-644.32,Frais generaux
+2026-03-10,Frais bancaires,-433.99,Frais generaux
+2026-03-12,Paiement facture FF2026020045 - EnerFret,-2433.61,Paiement fournisseur
+2026-03-14,Assurance professionnelle,-950.00,Frais generaux
+2026-03-16,Reglement facture FC2026020017 - Dupont Materiaux,22343.47,Encaissement client
+2026-03-16,Reglement facture FC2026020147 - Central Bricolage,3269.42,Encaissement client
+2026-03-17,Reglement facture FC2026010028 - SARL Lefevre Equipements,15830.76,Encaissement client
+2026-03-17,Paiement facture FF2026020075 - Outillage Services,-1524.47,Paiement fournisseur
+2026-03-18,Reglement facture FC2026020005 - Meunier Negoce,15460.90,Encaissement client
+2026-03-19,Reglement facture FC2026010106 - Rousseau Negoce,7234.52,Encaissement client
+2026-03-20,Paiement facture FF2026020065 - Emballages Dupuis,-1872.74,Paiement fournisseur
+2026-03-20,Fournitures de bureau,-620.13,Frais generaux
+2026-03-22,Reglement facture FC2026020053 - Bernard Fils,7952.04,Encaissement client
+2026-03-23,Reglement facture FC2026020041 - Groupe Charpentier,12345.20,Encaissement client
+2026-03-24,Reglement facture FC2026020131 - Nord Equipement,10361.37,Encaissement client
+2026-03-25,Reglement facture FC2026020095 - Marchand Freres,11260.43,Encaissement client
+2026-03-28,Reglement facture FC2026020148 - Central Bricolage,3117.62,Encaissement client
+2026-03-29,Reglement facture FC2026020167 - Vallee Distribution,3879.58,Encaissement client
+2026-03-29,Paiement facture FF2026020046 - EnerFret,-2203.49,Paiement fournisseur
+2026-04-02,Paiement facture FF2026030018 - Materiel Pro Distribution,-28791.68,Paiement fournisseur
+2026-04-03,Reglement facture FC2026030066 - Distri Ouest,13923.52,Encaissement client
+2026-04-03,Reglement facture FC2026020087 - Techno Bat,7171.51,Encaissement client
+2026-04-03,Reglement facture FC2026030096 - Marchand Freres,10733.44,Encaissement client
+2026-04-03,Paiement facture FF2026020005 - Global Import SA,-47265.99,Paiement fournisseur
+2026-04-03,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2026-04-03,Entretien local,-81.53,Frais generaux
+2026-04-06,Entretien local,-179.07,Frais generaux
+2026-04-08,Reglement facture FC2026020077 - Petit & Cie,5352.33,Encaissement client
+2026-04-08,Reglement facture FC2026030149 - Central Bricolage,3409.30,Encaissement client
+2026-04-08,Paiement facture FF2026030066 - Emballages Dupuis,-2119.13,Paiement fournisseur
+2026-04-08,Emprunts (vehicules + local),-11600.00,Emprunt
+2026-04-08,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2026-04-09,Reglement facture FC2026030006 - Meunier Negoce,18028.92,Encaissement client
+2026-04-09,Loyer entrepot,-10500.00,Loyer
+2026-04-11,Reglement facture FC2026030168 - Vallee Distribution,4471.19,Encaissement client
+2026-04-11,Paiement facture FF2026030030 - Trans Log Express,-8689.23,Paiement fournisseur
+2026-04-11,Paiement facture FF2026030047 - EnerFret,-2291.44,Paiement fournisseur
+2026-04-13,Assurance professionnelle,-950.00,Frais generaux
+2026-04-14,Reglement facture FC2026020107 - Rousseau Negoce,7352.51,Encaissement client
+2026-04-15,Frais bancaires,-347.85,Frais generaux
+2026-04-19,Reglement facture FC2026030054 - Bernard Fils,8296.52,Encaissement client
+2026-04-20,Reglement facture FC2026020029 - SARL Lefevre Equipements,13780.72,Encaissement client
+2026-04-20,Reglement facture FC2026030042 - Groupe Charpentier,13695.88,Encaissement client
+2026-04-21,Reglement facture FC2026030078 - Petit & Cie,5932.73,Encaissement client
+2026-04-26,Paiement facture FF2026030048 - EnerFret,-2134.28,Paiement fournisseur
+2026-04-27,Reglement facture FC2026030120 - Alpha Fournitures,5068.39,Encaissement client
+2026-04-28,Reglement facture FC2026030030 - SARL Lefevre Equipements,14555.24,Encaissement client
+2026-04-28,Reglement facture FC2026030150 - Central Bricolage,3464.26,Encaissement client
+2026-05-01,Reglement facture FC2026030018 - Dupont Materiaux,22510.52,Encaissement client
+2026-05-03,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2026-05-05,Reglement facture FC2026030132 - Nord Equipement,8835.40,Encaissement client
+2026-05-06,Reglement facture FC2026040067 - Distri Ouest,13940.12,Encaissement client
+2026-05-07,Reglement facture FC2026040007 - Meunier Negoce,16373.72,Encaissement client
+2026-05-08,Reglement facture FC2026030108 - Rousseau Negoce,7906.69,Encaissement client
+2026-05-08,Emprunts (vehicules + local),-11600.00,Emprunt
+2026-05-08,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2026-05-08,Petit outillage,-482.96,Frais generaux
+2026-05-08,Petit outillage,-529.06,Frais generaux
+2026-05-11,Reglement facture FC2026040151 - Central Bricolage,3412.72,Encaissement client
+2026-05-13,Reglement facture FC2026040055 - Bernard Fils,7881.26,Encaissement client
+2026-05-13,Paiement facture FF2026040067 - Emballages Dupuis,-2152.13,Paiement fournisseur
+2026-05-13,Assurance professionnelle,-950.00,Frais generaux
+2026-05-14,Paiement facture FF2026040049 - EnerFret,-2407.63,Paiement fournisseur
+2026-05-15,Reglement facture FC2026040088 - Techno Bat,9124.90,Encaissement client
+2026-05-16,Paiement facture FF2026030006 - Global Import SA,-42995.80,Paiement fournisseur
+2026-05-16,Paiement facture FF2026040019 - Materiel Pro Distribution,-30229.32,Paiement fournisseur
+2026-05-17,Paiement facture FF2026040031 - Trans Log Express,-8707.50,Paiement fournisseur
+2026-05-20,Paiement facture FF2026040076 - Outillage Services,-1509.28,Paiement fournisseur
+2026-05-23,Reglement facture FC2026040109 - Rousseau Negoce,6505.38,Encaissement client
+2026-05-23,Frais divers exploitation,-120.57,Frais generaux
+2026-05-24,Reglement facture FC2026040019 - Dupont Materiaux,19002.44,Encaissement client
+2026-05-25,Reglement facture FC2026040097 - Marchand Freres,12434.53,Encaissement client
+2026-05-28,Reglement facture FC2026040031 - SARL Lefevre Equipements,16859.11,Encaissement client
+2026-05-30,Reglement facture FC2026040043 - Groupe Charpentier,12649.02,Encaissement client
+2026-05-31,Reglement facture FC2026040152 - Central Bricolage,3154.84,Encaissement client
+2026-06-01,Reglement facture FC2026040133 - Nord Equipement,9165.24,Encaissement client
+2026-06-01,Paiement facture FF2026040050 - EnerFret,-2387.49,Paiement fournisseur
+2026-06-02,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2026-06-03,Fournitures de bureau,-174.58,Frais generaux
+2026-06-04,Reglement facture FC2026040121 - Alpha Fournitures,5123.76,Encaissement client
+2026-06-05,Reglement facture FC2026040169 - Vallee Distribution,4334.10,Encaissement client
+2026-06-07,Emprunts (vehicules + local),-11600.00,Emprunt
+2026-06-07,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2026-06-09,Reglement facture FC2026050044 - Groupe Charpentier,12966.96,Encaissement client
+2026-06-09,Reglement facture FC2026050153 - Central Bricolage,3172.44,Encaissement client
+2026-06-10,Reglement facture FC2026050068 - Distri Ouest,16811.09,Encaissement client
+2026-06-10,Reglement facture FC2026040079 - Petit & Cie,5897.64,Encaissement client
+2026-06-10,Frais bancaires,-506.91,Frais generaux
+2026-06-11,Reglement facture FC2026050020 - Dupont Materiaux,25202.46,Encaissement client
+2026-06-12,Reglement facture FC2026050098 - Marchand Freres,10137.66,Encaissement client
+2026-06-12,Assurance professionnelle,-950.00,Frais generaux
+2026-06-13,Reglement facture FC2026050122 - Alpha Fournitures,4441.17,Encaissement client
+2026-06-13,Reglement facture FC2026050134 - Nord Equipement,8708.94,Encaissement client
+2026-06-13,Paiement facture FF2026040007 - Global Import SA,-44861.37,Paiement fournisseur
+2026-06-14,Paiement facture FF2026050051 - EnerFret,-2264.74,Paiement fournisseur
+2026-06-16,Reglement facture FC2026050170 - Vallee Distribution,4364.93,Encaissement client
+2026-06-18,Entretien local,-449.15,Frais generaux
+2026-06-19,Entretien local,-322.33,Frais generaux
+2026-06-20,Reglement facture FC2026050056 - Bernard Fils,10290.56,Encaissement client
+2026-06-21,Paiement facture FF2026050052 - EnerFret,-2191.76,Paiement fournisseur
+2026-06-24,Paiement facture FF2026050008 - Global Import SA,-44458.85,Paiement fournisseur
+2026-06-24,Paiement facture FF2026050068 - Emballages Dupuis,-2022.32,Paiement fournisseur
+2026-06-27,Reglement facture FC2026050008 - Meunier Negoce,18242.68,Encaissement client
+2026-06-27,Reglement facture FC2026050154 - Central Bricolage,3422.88,Encaissement client
+2026-06-27,Paiement facture FF2026050020 - Materiel Pro Distribution,-31799.21,Paiement fournisseur
+2026-06-30,Petit outillage,-551.18,Frais generaux
+2026-07-01,Paiement facture FF2026050032 - Trans Log Express,-8600.86,Paiement fournisseur
+2026-07-02,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2026-07-02,Frais divers exploitation,-498.68,Frais generaux
+2026-07-07,Emprunts (vehicules + local),-11600.00,Emprunt
+2026-07-07,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2026-07-08,Reglement facture FC2026060069 - Distri Ouest,17072.09,Encaissement client
+2026-07-09,Loyer entrepot,-10500.00,Loyer
+2026-07-10,Reglement facture FC2026050080 - Petit & Cie,5191.06,Encaissement client
+2026-07-11,Paiement facture FF2026060053 - EnerFret,-2030.69,Paiement fournisseur
+2026-07-12,Assurance professionnelle,-950.00,Frais generaux
+2026-07-14,Reglement facture FC2026060045 - Groupe Charpentier,11256.60,Encaissement client
+2026-07-14,Reparation urgente vehicule utilitaire (panne moteur),-4300.00,Frais generaux
+2026-07-15,Reglement facture FC2026050032 - SARL Lefevre Equipements,13706.82,Encaissement client
+2026-07-15,Petit outillage,-478.85,Frais generaux
+2026-07-16,Reglement facture FC2026060099 - Marchand Freres,11566.58,Encaissement client
+2026-07-16,Reglement facture FC2026050110 - Rousseau Negoce,7509.08,Encaissement client
+2026-07-16,Frais divers exploitation,-125.85,Frais generaux
+2026-07-18,Reglement facture FC2026060123 - Alpha Fournitures,5598.47,Encaissement client
+2026-07-18,Paiement facture FF2026060069 - Emballages Dupuis,-1834.25,Paiement fournisseur
+2026-07-19,Paiement facture FF2026060077 - Outillage Services,-1515.12,Paiement fournisseur
+2026-07-20,Reglement facture FC2026060156 - Central Bricolage,3058.78,Encaissement client
+2026-07-21,Reglement facture FC2026060009 - Meunier Negoce,18482.03,Encaissement client
+2026-07-21,Reglement facture FC2026060089 - Techno Bat,8595.14,Encaissement client
+2026-07-21,Reglement facture FC2026060155 - Central Bricolage,3158.42,Encaissement client
+2026-07-24,Reglement facture FC2026060057 - Bernard Fils,7996.66,Encaissement client
+2026-07-26,Reglement facture FC2026060111 - Rousseau Negoce,6541.69,Encaissement client
+2026-07-29,Paiement facture FF2026060054 - EnerFret,-2395.05,Paiement fournisseur
+2026-07-30,Reglement facture FC2026060081 - Petit & Cie,6844.19,Encaissement client
+2026-07-30,Paiement facture FF2026060021 - Materiel Pro Distribution,-29929.38,Paiement fournisseur
+2026-07-30,Paiement facture FF2026060033 - Trans Log Express,-8554.09,Paiement fournisseur
+2026-07-30,Petit outillage,-330.32,Frais generaux
+2026-07-31,Reglement facture FC2026060021 - Dupont Materiaux,24418.79,Encaissement client
+2026-07-31,Petit outillage,-365.27,Frais generaux
+2026-08-01,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2026-08-01,Petit outillage,-408.46,Frais generaux
+2026-08-03,Paiement facture FF2026070055 - EnerFret,-2311.01,Paiement fournisseur
+2026-08-05,Paiement facture FF2026070034 - Trans Log Express,-8134.89,Paiement fournisseur
+2026-08-06,Reglement facture FC2026060171 - Vallee Distribution,3460.26,Encaissement client
+2026-08-06,Emprunts (vehicules + local),-11600.00,Emprunt
+2026-08-06,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2026-08-08,Reglement facture FC2026060135 - Nord Equipement,9071.53,Encaissement client
+2026-08-09,Paiement facture FF2026060009 - Global Import SA,-42610.44,Paiement fournisseur
+2026-08-09,Fournitures de bureau,-132.06,Frais generaux
+2026-08-10,Reglement facture FC2026070157 - Central Bricolage,3215.86,Encaissement client
+2026-08-11,Paiement facture FF2026070022 - Materiel Pro Distribution,-29913.85,Paiement fournisseur
+2026-08-11,Assurance professionnelle,-950.00,Frais generaux
+2026-08-13,Reglement facture FC2026060033 - SARL Lefevre Equipements,16731.07,Encaissement client
+2026-08-14,Reglement facture FC2026070046 - Groupe Charpentier,10211.68,Encaissement client
+2026-08-15,Reglement facture FC2026070172 - Vallee Distribution,3947.75,Encaissement client
+2026-08-16,Reglement facture FC2026070022 - Dupont Materiaux,21692.51,Encaissement client
+2026-08-17,Reglement facture FC2026070100 - Marchand Freres,10393.38,Encaissement client
+2026-08-21,Reglement facture FC2026070058 - Bernard Fils,8365.65,Encaissement client
+2026-08-21,Frais divers exploitation,-602.16,Frais generaux
+2026-08-25,Entretien local,-348.19,Frais generaux
+2026-08-26,Paiement facture FF2026070070 - Emballages Dupuis,-1995.43,Paiement fournisseur
+2026-08-27,Paiement facture FF2026070010 - Global Import SA,-48537.24,Paiement fournisseur
+2026-08-28,Reglement facture FC2026070112 - Rousseau Negoce,6377.55,Encaissement client
+2026-08-28,Reglement facture FC2026070124 - Alpha Fournitures,5598.39,Encaissement client
+2026-08-31,Paiement facture FF2026070056 - EnerFret,-2343.29,Paiement fournisseur
+2026-08-31,"Salaires (5 ETP, charges comprises)",-19000.00,Salaires
+2026-08-31,Frais bancaires,-414.66,Frais generaux
+2026-09-03,Reglement facture FC2026070070 - Distri Ouest,14766.39,Encaissement client
+2026-09-03,Reglement facture FC2026080090 - Techno Bat,8202.03,Encaissement client
+2026-09-03,Reglement facture FC2026070136 - Nord Equipement,8710.33,Encaissement client
+2026-09-05,Emprunts (vehicules + local),-11600.00,Emprunt
+2026-09-05,Abonnements logiciels (ERP/CRM/compta),-620.00,Abonnements
+2026-09-06,Reglement facture FC2026070158 - Central Bricolage,3421.24,Encaissement client
+2026-09-10,Assurance professionnelle,-950.00,Frais generaux
+2026-09-11,Paiement facture FF2026080057 - EnerFret,-2259.79,Paiement fournisseur
+2026-09-12,Reglement facture FC2026080125 - Alpha Fournitures,5250.40,Encaissement client
+2026-09-12,Reglement facture FC2026080159 - Central Bricolage,3404.88,Encaissement client
+2026-09-13,Reglement facture FC2026070082 - Petit & Cie,5399.36,Encaissement client
+2026-09-14,Reglement facture FC2026070010 - Meunier Negoce,19397.56,Encaissement client
+2026-09-14,Paiement facture FF2026080023 - Materiel Pro Distribution,-31013.24,Paiement fournisseur
+2026-09-14,Petit outillage,-263.00,Frais generaux
+2026-09-16,Paiement facture FF2026080078 - Outillage Services,-1486.12,Paiement fournisseur
+2026-09-16,Fournitures de bureau,-347.91,Frais generaux
+2026-09-17,Paiement facture FF2026080035 - Trans Log Express,-9899.83,Paiement fournisseur
+2026-09-18,Reglement facture FC2026070034 - SARL Lefevre Equipements,13392.92,Encaissement client
+2026-09-18,Paiement facture FF2026080011 - Global Import SA,-41857.48,Paiement fournisseur
+2026-09-19,Frais divers exploitation,-441.83,Frais generaux
+2026-09-20,Reglement facture FC2026080071 - Distri Ouest,14513.97,Encaissement client
+2026-09-25,Paiement facture FF2026080058 - EnerFret,-2146.54,Paiement fournisseur
+2026-09-25,Paiement facture FF2026080071 - Emballages Dupuis,-2076.24,Paiement fournisseur
+2026-09-26,Reglement facture FC2026080101 - Marchand Freres,9380.74,Encaissement client

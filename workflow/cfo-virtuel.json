@@ -1,0 +1,474 @@
+{
+    "name": "CFO Virtuel - ATLAS",
+    "nodes": [{
+            "parameters": {},
+            "id": "2ef1b1fb-e505-4d6e-a506-1bd5de45c67c",
+            "name": "Declencheur manuel (test)",
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [-2256,
+                496
+            ],
+            "notes": "Pour tester/demontrer le workflow a la demande, sans attendre lundi 8h. Alimente exactement la meme suite que le Schedule Trigger."
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "VOTRE_ID_GOOGLE_SHEET",
+                    "mode": "list",
+                    "cachedResultName": "CFO Virtuel – Atlas Distribution",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1195773293,
+                    "mode": "list",
+                    "cachedResultName": "Transactions bancaires",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit#gid=1195773293"
+                },
+                "options": {}
+            },
+            "id": "f6fb800f-51aa-4396-a4c7-3f5e0a0d53c3",
+            "name": "Transactions bancaires",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [-1680,
+                112
+            ],
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 5000,
+            "executeOnce": true,
+            "onError": "continueErrorOutput",
+            "notes": "Lit l'historique des mouvements bancaires (date, libelle, montant, categorie). Sert au calcul du solde actuel et a la detection des depenses anormales."
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "VOTRE_ID_GOOGLE_SHEET",
+                    "mode": "list",
+                    "cachedResultName": "CFO Virtuel – Atlas Distribution",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1767332086,
+                    "mode": "list",
+                    "cachedResultName": "Factures clients",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit#gid=1767332086"
+                },
+                "options": {}
+            },
+            "id": "a4e5dab5-bbf1-4e7a-909e-2fad173325ca",
+            "name": "Factures clients",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [-1680,
+                352
+            ],
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 5000,
+            "executeOnce": true,
+            "onError": "continueErrorOutput",
+            "notes": "Lit les factures clients (emission, echeance, paiement). Sert au calcul du DSO par client et a la prevision des encaissements sur 13 semaines."
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "VOTRE_ID_GOOGLE_SHEET",
+                    "mode": "list",
+                    "cachedResultName": "CFO Virtuel – Atlas Distribution",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 282893469,
+                    "mode": "list",
+                    "cachedResultName": "Factures fournisseurs",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit#gid=282893469"
+                },
+                "options": {}
+            },
+            "id": "8a189da9-6a53-42a8-8024-8fd365d49fe8",
+            "name": "Factures fournisseurs",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [-1696,
+                560
+            ],
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 5000,
+            "executeOnce": true,
+            "onError": "continueErrorOutput",
+            "notes": "Lit les factures fournisseurs ouvertes. Sert a la prevision des decaissements sur 13 semaines (paiement suppose a echeance)."
+        },
+        {
+            "parameters": {
+                "jsCode": "// ============================================================================\n// CFO Virtuel - Calcul financier (delai de paiement, prevision de tresorerie\n// 13 semaines, detection d'anomalies). Toute la logique de calcul vit ICI :\n// Gemini (noeud suivant) ne fait qu'interpreter et rediger, jamais recalculer.\n// ============================================================================\n\nconst SEUIL_ALERTE_TRESORERIE = 15000;   // parametrable : seuil d'alerte tresorerie (EUR)\nconst FORECAST_WEEKS = 13;               // horizon de prevision (semaines)\nconst SEUIL_DEGRADATION_JOURS = 10;      // ecart (jours) entre les 2 fenetres de 3 mois pour flaguer une degradation\nconst Z_SCORE_SEUIL = 2;                 // seuil d'ecart-type pour une depense anormale\nconst FENETRE_ANOMALIE_DEPENSE_JOURS = 30; // parametrable : n'afficher que les depenses anormales des N derniers jours\nconst CATEGORIES_ANOMALIE_DEPENSES = ['Frais generaux', 'Loyer', 'Salaires', 'Emprunt', 'Abonnements'];\n// NB : \"Encaissement client\" et \"Paiement fournisseur\" sont volontairement exclus\n// de la detection d'anomalies par categorie : leurs montants varient naturellement\n// avec la taille des commandes/clients, ce qui generait un bruit statistique sans\n// valeur pour le dirigeant. Les paiements fournisseurs exceptionnels sont deja\n// couverts par la prevision de tresorerie (tension detectee sur le solde).\n\nfunction normalizeText(s) {\n  let t = String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();\n  t = t.replace(/\\b(d|l)'/g, '');\n  t = t.replace(/\\b(de|du|des|le|la|les)\\b/g, ' ');\n  return t.replace(/[^a-z0-9]+/g, '');\n}\n\nfunction toNumber(v) {\n  if (typeof v === 'number') return v;\n  if (v === null || v === undefined || v === '') return 0;\n  let s = String(v).trim().replace(/\\s/g, '').replace(/€/g, '');\n  if (/^-?\\d+,\\d+$/.test(s)) s = s.replace(',', '.');\n  const n = parseFloat(s);\n  return isNaN(n) ? 0 : n;\n}\n\nfunction fmtEur(n) {\n  return n.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });\n}\n\nfunction toDate(v) {\n  if (v === null || v === undefined || v === '') return null;\n  if (typeof v === 'number') {\n    if (v > 20000 && v < 90000) {\n      return DateTime.fromMillis(Date.UTC(1899, 11, 30) + v * 86400000);\n    }\n  }\n  const s = String(v).trim();\n  if (!s) return null;\n  let dt = DateTime.fromISO(s);\n  if (dt.isValid) return dt;\n  dt = DateTime.fromFormat(s, 'dd/MM/yyyy');\n  if (dt.isValid) return dt;\n  dt = DateTime.fromFormat(s, 'M/d/yyyy');\n  if (dt.isValid) return dt;\n  const native = new Date(s);\n  if (!isNaN(native.getTime())) return DateTime.fromJSDate(native);\n  return null;\n}\n\nfunction getVal(row, field) {\n  if (row[field] !== undefined) return row[field];\n  const target = normalizeText(field);\n  for (const key of Object.keys(row)) {\n    if (normalizeText(key) === target) return row[key];\n  }\n  return undefined;\n}\n\nconst txRows = $('Transactions bancaires').all().map((i) => i.json);\nconst facClientsRows = $('Factures clients').all().map((i) => i.json);\nconst facFournisseursRows = $('Factures fournisseurs').all().map((i) => i.json);\nconst chargesRows = $('Charges récurrentes').all().map((i) => i.json);\nconst soldeRows = $('Solde bancaire de départ').all().map((i) => i.json);\n\nconst now = DateTime.now().startOf('day');\n\nconst transactions = txRows\n  .map((r) => ({ date: toDate(getVal(r, 'date')), libelle: getVal(r, 'libelle'), montant: toNumber(getVal(r, 'montant')), categorie: getVal(r, 'categorie') }))\n  .filter((t) => t.date);\nif (!transactions.length) {\n  const premiere = txRows[0] ? JSON.stringify(txRows[0]) : 'aucune ligne recue';\n  throw new Error(`Aucune transaction bancaire lue (onglet \"Transactions bancaires\") - lignes recues: ${txRows.length}, premiere ligne: ${premiere}. Verifier les en-tetes de colonnes (date, libelle, montant, categorie) et le format des dates.`);\n}\n\nconst soldeDepartRow = soldeRows[0];\nif (!soldeDepartRow) throw new Error('Onglet \"Solde bancaire de depart\" vide ou introuvable.');\nconst soldeDepart = toNumber(getVal(soldeDepartRow, 'solde'));\nconst soldeActuel = soldeDepart + transactions.reduce((s, t) => s + t.montant, 0);\n\nfunction parseFactures(rows, cleTiers) {\n  return rows\n    .map((r) => ({\n      numero: getVal(r, 'numero'),\n      [cleTiers]: getVal(r, cleTiers),\n      montant: toNumber(getVal(r, 'montant')),\n      date_emission: toDate(getVal(r, 'date_emission')),\n      date_echeance: toDate(getVal(r, 'date_echeance')),\n      date_paiement: getVal(r, 'date_paiement') ? toDate(getVal(r, 'date_paiement')) : null,\n    }))\n    .filter((f) => f.date_emission && f.date_echeance);\n}\n\nconst facturesClients = parseFactures(facClientsRows, 'client');\nif (!facturesClients.length) {\n  const premiere = facClientsRows[0] ? JSON.stringify(facClientsRows[0]) : 'aucune ligne recue';\n  throw new Error(`Aucune facture client lue (onglet \"Factures clients\") - lignes recues: ${facClientsRows.length}, premiere ligne: ${premiere}. Verifier les en-tetes de colonnes et le format des dates.`);\n}\nconst facturesFournisseurs = parseFactures(facFournisseursRows, 'fournisseur');\nif (!facturesFournisseurs.length) {\n  const premiere = facFournisseursRows[0] ? JSON.stringify(facFournisseursRows[0]) : 'aucune ligne recue';\n  throw new Error(`Aucune facture fournisseur lue (onglet \"Factures fournisseurs\") - lignes recues: ${facFournisseursRows.length}, premiere ligne: ${premiere}. Verifier les en-tetes de colonnes et le format des dates.`);\n}\n\nconst chargesRecurrentes = chargesRows\n  .map((r) => ({\n    libelle: getVal(r, 'libelle'),\n    categorie: getVal(r, 'categorie'),\n    montant: toNumber(getVal(r, 'montant')),\n    frequence: getVal(r, 'frequence'),\n    prochaine_echeance: toDate(getVal(r, 'prochaine_echeance')),\n    intervalle_jours: toNumber(getVal(r, 'intervalle_jours')),\n  }))\n  .filter((c) => c.prochaine_echeance);\nif (!chargesRecurrentes.length) {\n  const premiere = chargesRows[0] ? JSON.stringify(chargesRows[0]) : 'aucune ligne recue';\n  throw new Error(`Aucune charge recurrente lue (onglet \"Charges recurrentes\") - lignes recues: ${chargesRows.length}, premiere ligne: ${premiere}. Verifier les en-tetes de colonnes et le format des dates.`);\n}\n\n// --- Delai de paiement (une seule metrique, coherente, globale et par client) ---\n// Definition : nombre de jours entre l'echeance et le paiement reel (ou, pour une\n// facture encore ouverte et deja en retard, entre l'echeance et aujourd'hui).\n// Ce n'est PAS le DSO comptable classique (encours / CA x nb jours), qui melange\n// volume de vente et vitesse de paiement et se lit mal dans un briefing oral -\n// on ne garde qu'un seul indicateur, directement actionnable : \"vos clients\n// paient en moyenne X jours apres l'echeance\".\n\nfunction delaiFacture(f, referenceNow) {\n  if (f.date_paiement) {\n    return { delai: Math.round(f.date_paiement.diff(f.date_echeance, 'days').days), statut: 'payee' };\n  }\n  if (f.date_echeance < referenceNow) {\n    return { delai: Math.round(referenceNow.diff(f.date_echeance, 'days').days), statut: 'ouverte_en_retard' };\n  }\n  return null;\n}\n\nconst troisMois = now.minus({ months: 3 });\nconst sixMois = now.minus({ months: 6 });\nconst moyenne = (arr) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null);\n\nconst clients = [...new Set(facturesClients.map((f) => f.client))];\nconst parClient = clients\n  .map((client) => {\n    const facturesDuClient = facturesClients.filter((f) => f.client === client);\n    const recentes = facturesDuClient.filter((f) => f.date_emission >= troisMois);\n    const precedentes = facturesDuClient.filter((f) => f.date_emission >= sixMois && f.date_emission < troisMois);\n\n    const delaisRecents = recentes.map((f) => delaiFacture(f, now)).filter(Boolean).map((d) => d.delai);\n    const delaisPrecedents = precedentes.map((f) => delaiFacture(f, now)).filter(Boolean).map((d) => d.delai);\n\n    const delaiMoyenRecent = moyenne(delaisRecents);\n    const delaiMoyenPrecedent = moyenne(delaisPrecedents);\n\n    const encoursOuvert = facturesDuClient.filter((f) => !f.date_paiement).reduce((s, f) => s + f.montant, 0);\n    const facturesOuvertesEnRetard = facturesDuClient.filter((f) => !f.date_paiement && f.date_echeance < now);\n    const retardMax = facturesOuvertesEnRetard.length\n      ? Math.max(...facturesOuvertesEnRetard.map((f) => Math.round(now.diff(f.date_echeance, 'days').days)))\n      : 0;\n\n    let degradation = false;\n    let variation = null;\n    if (delaiMoyenRecent !== null && delaiMoyenPrecedent !== null) {\n      variation = Math.round(delaiMoyenRecent - delaiMoyenPrecedent);\n      degradation = variation >= SEUIL_DEGRADATION_JOURS;\n    }\n\n    return {\n      client,\n      delai_moyen_3_derniers_mois_jours: delaiMoyenRecent !== null ? Math.round(delaiMoyenRecent) : null,\n      delai_moyen_3_mois_precedents_jours: delaiMoyenPrecedent !== null ? Math.round(delaiMoyenPrecedent) : null,\n      variation_jours: variation,\n      degradation_detectee: degradation,\n      encours_ouvert_eur: Math.round(encoursOuvert * 100) / 100,\n      encours_ouvert_fmt: fmtEur(Math.round(encoursOuvert * 100) / 100),\n      retard_max_jours_facture_ouverte: retardMax,\n    };\n  })\n  .sort((a, b) => (b.variation_jours ?? -999) - (a.variation_jours ?? -999));\n\nconst facturesOuvertes = facturesClients.filter((f) => !f.date_paiement);\nconst encoursClientsTotal = facturesOuvertes.reduce((s, f) => s + f.montant, 0);\n\nconst tousDelaisRecents = facturesClients\n  .filter((f) => f.date_emission >= troisMois)\n  .map((f) => delaiFacture(f, now))\n  .filter(Boolean)\n  .map((d) => d.delai);\nconst delaiMoyenPaiementJours = tousDelaisRecents.length\n  ? Math.round(tousDelaisRecents.reduce((a, b) => a + b, 0) / tousDelaisRecents.length)\n  : null;\n\n// --- Prevision de tresorerie sur 13 semaines ---\n\nconst delaiAjustementParClient = {};\nparClient.forEach((c) => {\n  delaiAjustementParClient[c.client] = c.delai_moyen_3_derniers_mois_jours ?? c.delai_moyen_3_mois_precedents_jours ?? 0;\n});\n\nfunction genererOccurrencesCharge(charge, debut, fin) {\n  const occ = [];\n  let d = charge.prochaine_echeance;\n  while (d <= fin) {\n    if (d >= debut) occ.push({ date: d, montant: charge.montant, libelle: charge.libelle });\n    d = d.plus({ days: charge.intervalle_jours });\n  }\n  return occ;\n}\n\nconst finHorizon = now.plus({ weeks: FORECAST_WEEKS });\n\nconst encaissementsAttendus = facturesClients\n  .filter((f) => !f.date_paiement)\n  .map((f) => {\n    const delai = delaiAjustementParClient[f.client] || 0;\n    const dateEncaissementPrevue = f.date_echeance.plus({ days: Math.max(0, Math.round(delai)) });\n    return { date: dateEncaissementPrevue, montant: f.montant, source: `Facture ${f.numero} - ${f.client}` };\n  })\n  .filter((e) => e.date >= now && e.date <= finHorizon);\n\nconst decaissementsFournisseurs = facturesFournisseurs\n  .filter((f) => !f.date_paiement)\n  .map((f) => ({ date: f.date_echeance, montant: f.montant, source: `Facture ${f.numero} - ${f.fournisseur}` }))\n  .filter((d) => d.date >= now && d.date <= finHorizon);\n\nlet decaissementsCharges = [];\nchargesRecurrentes.forEach((c) => {\n  decaissementsCharges = decaissementsCharges.concat(genererOccurrencesCharge(c, now, finHorizon));\n});\n\nconst semaines = [];\nlet soldeCourant = soldeActuel;\nlet debutSemaine = now;\nlet horizonFiableSemaines = 0;\nfor (let s = 1; s <= FORECAST_WEEKS; s++) {\n  const finSemaine = debutSemaine.plus({ days: 7 });\n  const encaissementsSemaine = encaissementsAttendus\n    .filter((e) => e.date >= debutSemaine && e.date < finSemaine)\n    .reduce((sum, e) => sum + e.montant, 0);\n  const decaissementsFournisseursSemaine = decaissementsFournisseurs\n    .filter((d) => d.date >= debutSemaine && d.date < finSemaine)\n    .reduce((sum, d) => sum + d.montant, 0);\n  const decaissementsChargesSemaine = decaissementsCharges\n    .filter((d) => d.date >= debutSemaine && d.date < finSemaine)\n    .reduce((sum, d) => sum + d.montant, 0);\n  const decaissementsSemaine = decaissementsFournisseursSemaine + decaissementsChargesSemaine;\n  const fluxNet = encaissementsSemaine - decaissementsSemaine;\n  soldeCourant = Math.round((soldeCourant + fluxNet) * 100) / 100;\n  if (encaissementsSemaine !== 0 || decaissementsFournisseursSemaine !== 0) horizonFiableSemaines = s;\n  semaines.push({\n    semaine: s,\n    debut: debutSemaine.toISODate(),\n    fin: finSemaine.minus({ days: 1 }).toISODate(),\n    encaissements_eur: Math.round(encaissementsSemaine * 100) / 100,\n    encaissements_fmt: fmtEur(Math.round(encaissementsSemaine * 100) / 100),\n    decaissements_eur: Math.round(decaissementsSemaine * 100) / 100,\n    decaissements_fmt: fmtEur(Math.round(decaissementsSemaine * 100) / 100),\n    flux_net_eur: Math.round(fluxNet * 100) / 100,\n    flux_net_fmt: fmtEur(Math.round(fluxNet * 100) / 100),\n    solde_fin_semaine_eur: soldeCourant,\n    solde_fin_semaine_fmt: fmtEur(soldeCourant),\n    sous_seuil: soldeCourant < SEUIL_ALERTE_TRESORERIE,\n  });\n  debutSemaine = finSemaine;\n}\nconst semainesSousSeuil = semaines.filter((s) => s.sous_seuil);\nconst semainesSousSeuilFiables = semainesSousSeuil.filter((s) => s.semaine <= horizonFiableSemaines);\n\n// --- Depenses anormales (z-score \"leave-one-out\" par categorie) ---\n// Le regroupement par categorie se fait sur une cle normalisee (accents/casse\n// ignores) pour que \"Frais generaux\" et \"Frais généraux\" alimentent la MEME\n// population statistique, quelle que soit l'orthographe retenue dans le Sheet.\n\nconst CATEGORIES_ANOMALIE_NORMALISEES = CATEGORIES_ANOMALIE_DEPENSES.map(normalizeText);\nconst parCategorie = {};\ntransactions.forEach((t) => {\n  const norm = normalizeText(t.categorie);\n  if (!CATEGORIES_ANOMALIE_NORMALISEES.includes(norm)) return;\n  if (!parCategorie[norm]) parCategorie[norm] = { label: t.categorie, txs: [] };\n  parCategorie[norm].txs.push(t);\n});\n\nfunction moyenneEcartType(valeurs) {\n  const n = valeurs.length;\n  if (n < 2) return { moyenne: valeurs[0] ?? 0, ecartType: 0 };\n  const m = valeurs.reduce((a, b) => a + b, 0) / n;\n  const variance = valeurs.reduce((a, b) => a + (b - m) ** 2, 0) / (n - 1);\n  return { moyenne: m, ecartType: Math.sqrt(variance) };\n}\n\nconst anomaliesDepenses = [];\nObject.values(parCategorie).forEach(({ label, txs }) => {\n  if (txs.length < 5) return; // pas assez de donnees pour une base statistique fiable\n  txs.forEach((t, idx) => {\n    const autres = txs.filter((_, i) => i !== idx).map((x) => x.montant);\n    const { moyenne: m, ecartType } = moyenneEcartType(autres);\n    if (ecartType === 0) return;\n    const z = (t.montant - m) / ecartType;\n    if (Math.abs(z) > Z_SCORE_SEUIL) {\n      anomaliesDepenses.push({\n        date: t.date.toISODate(),\n        libelle: t.libelle,\n        montant_eur: t.montant,\n        montant_fmt: fmtEur(t.montant),\n        categorie: label,\n        moyenne_categorie_eur: Math.round(m * 100) / 100,\n        moyenne_categorie_fmt: fmtEur(Math.round(m * 100) / 100),\n        ecart_type_categorie_eur: Math.round(ecartType * 100) / 100,\n        z_score: Math.round(z * 100) / 100,\n      });\n    }\n  });\n});\nanomaliesDepenses.sort((a, b) => Math.abs(b.z_score) - Math.abs(a.z_score));\nconst anomaliesRecentes = anomaliesDepenses.filter((a) => DateTime.fromISO(a.date) >= now.minus({ days: FENETRE_ANOMALIE_DEPENSE_JOURS }));\n\n// --- Detail chiffre (message Telegram separe, genere ici - pas par Gemini) ---\n\nfunction escTelegram(s) {\n  return String(s)\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/([_*`\\[])/g, '\\\\$1');\n}\n\nlet detail = `Détail chiffré - Atlas Distribution\\n`;\ndetail += `Généré le ${now.toFormat('dd/MM/yyyy')}\\n\\n`;\ndetail += `TRÉSORERIE\\nSolde actuel : ${fmtEur(soldeActuel)}\\n`;\ndetail += `Horizon fiable de la prévision : ${horizonFiableSemaines} semaine(s) (au-delà, plus aucune facture connue, projection indicative uniquement)\\n`;\nif (semainesSousSeuilFiables.length) {\n  detail += `ALERTE - Semaines sous le seuil de ${fmtEur(SEUIL_ALERTE_TRESORERIE)} (horizon fiable) :\\n`;\n  semainesSousSeuilFiables.forEach((s) => {\n    detail += `  - S${s.semaine} (${s.debut} au ${s.fin}) : ${fmtEur(s.solde_fin_semaine_eur)}\\n`;\n  });\n} else {\n  detail += `Aucune semaine sous le seuil de ${fmtEur(SEUIL_ALERTE_TRESORERIE)} sur l'horizon fiable.\\n`;\n}\nif (semainesSousSeuil.length > semainesSousSeuilFiables.length) {\n  detail += `(Au-delà de l'horizon fiable, ${semainesSousSeuil.length - semainesSousSeuilFiables.length} semaine(s) supplémentaire(s) apparaissent sous le seuil faute de nouvelles factures connues - à ne pas lire comme une alerte confirmée.)\\n`;\n}\ndetail += `\\nDÉLAI DE PAIEMENT\\nRetard moyen (tous clients, 3 derniers mois) : ${delaiMoyenPaiementJours ?? 'N/A'} jour(s) après échéance\\n`;\ndetail += `Encours clients total (factures non payées) : ${fmtEur(encoursClientsTotal)}\\n`;\nconst clientsDegrades = parClient.filter((c) => c.degradation_detectee);\nif (clientsDegrades.length) {\n  detail += `Clients en dégradation :\\n`;\n  clientsDegrades.forEach((c) => {\n    detail += `  - ${c.client} : +${c.variation_jours}j (récent : ${c.delai_moyen_3_derniers_mois_jours}j vs précédent : ${c.delai_moyen_3_mois_precedents_jours}j)\\n`;\n  });\n} else {\n  detail += `Aucun client en dégradation notable.\\n`;\n}\ndetail += `\\nDÉPENSES ANORMALES (${FENETRE_ANOMALIE_DEPENSE_JOURS} derniers jours)\\n`;\nif (anomaliesRecentes.length) {\n  anomaliesRecentes.forEach((a) => {\n    detail += `  - ${a.date} - ${a.libelle} : ${a.montant_fmt} (moyenne catégorie : ${a.moyenne_categorie_fmt}, z=${a.z_score})\\n`;\n  });\n} else {\n  detail += `Aucune détectée sur cette période.\\n`;\n}\n\nreturn [{\n  json: {\n    meta: {\n      entreprise: 'Atlas Distribution',\n      date_generation: now.toISO(),\n      seuil_alerte_tresorerie_eur: SEUIL_ALERTE_TRESORERIE,\n      fenetre_anomalie_depense_jours: FENETRE_ANOMALIE_DEPENSE_JOURS,\n    },\n    tresorerie: {\n      solde_actuel_eur: Math.round(soldeActuel * 100) / 100,\n      solde_actuel_fmt: fmtEur(Math.round(soldeActuel * 100) / 100),\n      horizon_fiable_semaines: horizonFiableSemaines,\n      semaines,\n      semaines_sous_seuil_horizon_fiable: semainesSousSeuilFiables,\n      semaines_sous_seuil_indicatif: semainesSousSeuil.filter((s) => s.semaine > horizonFiableSemaines),\n    },\n    delai_paiement: {\n      delai_moyen_paiement_jours: delaiMoyenPaiementJours,\n      encours_clients_total_eur: Math.round(encoursClientsTotal * 100) / 100,\n      encours_clients_total_fmt: fmtEur(Math.round(encoursClientsTotal * 100) / 100),\n      par_client: parClient,\n    },\n    anomalies_depenses: anomaliesRecentes,\n    detail_telegram_markdown: escTelegram(detail),\n  },\n}];\n"
+            },
+            "id": "c8918f1b-d7e0-472f-b5e5-5e6c57ce236e",
+            "name": "Calcul financier (delai paiement, previsions, anomalies)",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [-1200,
+                272
+            ],
+            "onError": "continueErrorOutput",
+            "notes": "Tous les calculs financiers (DSO, prevision de tresorerie 13 semaines, depenses anormales >2 sigma) se font ICI, en JavaScript deterministe. Gemini (noeud suivant) ne recalcule rien : il interprete et redige uniquement a partir de cette sortie JSON."
+        },
+        {
+            "parameters": {
+                "chatId": "VOTRE_CHAT_ID_TELEGRAM",
+                "text": "={{ (() => { const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/([_*`\\[])/g, '\\\\$1'); const j = $json; let out; if (typeof j.content === 'string') out = j.content; else if (Array.isArray(j.content) && j.content[0] && j.content[0].text) out = j.content[0].text; else if (j.text) out = j.text; else if (j.completion) out = j.completion; else out = JSON.stringify(j); return esc(out); })() }}",
+                "additionalFields": {
+                    "appendAttribution": false
+                }
+            },
+            "id": "68407b3b-08c6-4bb3-b824-4f675872b146",
+            "name": "Envoyer le briefing (Telegram)",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [-720,
+                176
+            ],
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 5000,
+            "webhookId": "f0de705f-9f4d-456b-bff4-d381cc01c1f9",
+            "onError": "continueErrorOutput",
+            "notes": "Envoie le briefing redige par Gemini. Chat ID et credential Telegram API a renseigner (voir README)."
+        },
+        {
+            "parameters": {
+                "chatId": "VOTRE_CHAT_ID_TELEGRAM",
+                "text": "={{ $('Calcul financier (delai paiement, previsions, anomalies)').item.json.detail_telegram_markdown }}",
+                "additionalFields": {
+                    "appendAttribution": false
+                }
+            },
+            "id": "285a69f9-e982-4af1-a8a9-1a6399d66b41",
+            "name": "Envoyer le detail chiffre (Telegram)",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [-704,
+                400
+            ],
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 5000,
+            "webhookId": "5c814cae-f5c4-4f03-9cb4-a83bc535e6fe",
+            "onError": "continueErrorOutput",
+            "notes": "Envoie le detail chiffre genere directement par le noeud Code (pas par Gemini) : chiffres garantis exacts. Message separe du briefing (decouple : part meme si l'appel Gemini echoue)."
+        },
+        {
+            "parameters": {
+                "chatId": "VOTRE_CHAT_ID_TELEGRAM",
+                "text": "={{ (() => { const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/([_*`\\[])/g, '\\\\$1'); const noeud = $prevNode?.name || 'inconnu'; const msg = $json.error?.message || $json.error || $json.message || JSON.stringify($json).slice(0,300); return esc('Erreur - CFO Virtuel | Noeud: ' + noeud + ' | Message: ' + msg + ' | Heure: ' + $now.toFormat('dd/MM/yyyy HH:mm')); })() }}",
+                "additionalFields": {
+                    "appendAttribution": false
+                }
+            },
+            "id": "7fcd564d-4f30-4291-b975-2662c53522d9",
+            "name": "Alerte erreur (Telegram)",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [-880,
+                752
+            ],
+            "webhookId": "7b99ded8-7806-43b5-91bf-39a70e023fa3",
+            "executeOnce": true,
+            "notes": "Fan-in de toutes les sorties d'erreur (Google Sheets, Code, Gemini, Telegram). Le nom du noeud en echec est recupere via $prevNode.name (fiable meme avec plusieurs sources). executeOnce=true : un seul message envoye par execution, meme si (cas rare) plusieurs noeuds echouent dans le meme run - seul le premier est alors rapporte. Si CETTE alerte echoue aussi, l'execution apparaitra en echec dans l'historique n8n (pas de garde-fou supplementaire dans ce MVP)."
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [{
+                        "field": "weeks",
+                        "triggerAtDay": [
+                            1
+                        ],
+                        "triggerAtHour": 8
+                    }]
+                }
+            },
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.3,
+            "position": [-2240,
+                112
+            ],
+            "id": "2bcf9cc0-ae1f-4e95-9b15-f9373fa6b1ff",
+            "name": "Schedule Trigger - Lundi 8h"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "id": "1aaaffec-3efe-4e5a-89ba-524b04cdc942",
+            "name": "Modele Gemini (Chat Model)",
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [-1392,
+                128
+            ],
+            "notes": "Modele de langage utilise par le noeud 'Redaction du briefing (Gemini)'. Credential 'Google Gemini(PaLM) Api' (cle API gratuite Google AI Studio) a attacher manuellement."
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ (() => { const r = Object.assign({}, $json); delete r.detail_telegram_markdown; return 'Rapport chiffre de la semaine (JSON): ' + JSON.stringify(r); })() }}",
+                "messages": {
+                    "messageValues": [{
+                        "message": "Tu es le directeur financier (CFO) virtuel d'Atlas Distribution, une PME de négoce (~2 M EUR de CA annuel). Chaque lundi, tu reçois un rapport chiffré déjà calculé (JSON) : solde de trésorerie actuel et sa prévision sur 13 semaines, retard moyen de paiement après échéance (tous clients et par client) et son évolution, dépenses anormales récentes détectées statistiquement. Ta mission : rédiger le briefing hebdomadaire du dirigeant. Règles strictes : n'invente et ne recalcule aucun chiffre, utilise uniquement les valeurs du JSON fourni. Pour tout montant, utilise exclusivement les champs déjà formatés se terminant par _fmt (ex: \"59 710 €\") ; ne reformate et ne recalcule jamais toi-même un champ numérique se terminant par _eur. L'indicateur delai_paiement.delai_moyen_paiement_jours (et son équivalent par client) est un RETARD MOYEN APRÈS ÉCHÉANCE, pas un délai de paiement : nomme-le toujours ainsi (\"retard moyen après échéance\"), jamais \"délai de paiement\" ou \"DSO\". Le champ tresorerie.horizon_fiable_semaines indique jusqu'à quelle semaine la prévision s'appuie sur des factures déjà émises : les alertes de tresorerie.semaines_sous_seuil_horizon_fiable sont fiables et doivent être traitées comme des priorités concrètes ; les entrées de tresorerie.semaines_sous_seuil_indicatif (au-delà de cet horizon) ne reflètent que l'absence de nouvelles factures connues, mentionne-les au plus comme un rappel de continuer à facturer, jamais comme une alerte de rupture de trésorerie confirmée. N'utilise aucun symbole de mise en forme (pas d'accents graves, d'astérisques ni de dièses), uniquement du texte brut. 150 mots maximum. Français, ton direct et concret, sans jargon inutile, pas de formules de politesse. Termine toujours par exactement 3 priorités d'action concrètes, numérotées 1/2/3. Les priorités s'adressent au dirigeant, pas au système : formule des actions concrètes qu'il peut faire lui-même. Si aucune tension ni anomalie n'est détectée, dis-le clairement en une phrase plutôt que d'en inventer."
+                    }]
+                },
+                "batching": {}
+            },
+            "id": "7adb39bd-c841-48e3-8ba1-720643af3b29",
+            "name": "Redaction du briefing (Gemini)",
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.7,
+            "position": [-1408, -96],
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 5000,
+            "onError": "continueErrorOutput",
+            "notes": "Redige le briefing (150 mots max, FR, 3 priorites d'action) a partir du JSON du noeud Code, via le modele connecte 'Modele Gemini (Chat Model)'. Gemini ne recalcule rien. Verifier au 1er test le champ exact de la reponse (attendu: $json.text) et ajuster le noeud Telegram si besoin."
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "VOTRE_ID_GOOGLE_SHEET",
+                    "mode": "list",
+                    "cachedResultName": "CFO Virtuel – Atlas Distribution",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 794392554,
+                    "mode": "list",
+                    "cachedResultName": "Solde bancaire de départ",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit#gid=794392554"
+                },
+                "options": {}
+            },
+            "id": "ef4bd9f1-5f6e-4719-a24a-1c93b1816757",
+            "name": "Solde bancaire de départ",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [-1664,
+                960
+            ],
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 5000,
+            "executeOnce": true,
+            "onError": "continueErrorOutput",
+            "notes": "Solde d'ouverture historique. Combine aux transactions bancaires, sert a calculer le solde actuel (point d'ancrage de la prevision)."
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "VOTRE_ID_GOOGLE_SHEET",
+                    "mode": "list",
+                    "cachedResultName": "CFO Virtuel – Atlas Distribution",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 2061879340,
+                    "mode": "list",
+                    "cachedResultName": "Charges récurrentes",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/VOTRE_ID_GOOGLE_SHEET/edit#gid=2061879340"
+                },
+                "options": {}
+            },
+            "id": "cad44ae2-85ad-47bd-ba9b-9643c820a207",
+            "name": "Charges récurrentes",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [-1680,
+                768
+            ],
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 5000,
+            "executeOnce": true,
+            "onError": "continueErrorOutput",
+            "notes": "Loyer, salaires, emprunts, abonnements : charges connues a l'avance, projetees sur les 13 semaines via leur frequence."
+        }
+    ],
+    "pinData": {},
+    "connections": {
+        "Declencheur manuel (test)": {
+            "main": [
+                [{
+                    "node": "Transactions bancaires",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Transactions bancaires": {
+            "main": [
+                [{
+                    "node": "Factures clients",
+                    "type": "main",
+                    "index": 0
+                }],
+                [{
+                    "node": "Alerte erreur (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Factures clients": {
+            "main": [
+                [{
+                    "node": "Factures fournisseurs",
+                    "type": "main",
+                    "index": 0
+                }],
+                [{
+                    "node": "Alerte erreur (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Factures fournisseurs": {
+            "main": [
+                [{
+                    "node": "Charges récurrentes",
+                    "type": "main",
+                    "index": 0
+                }],
+                [{
+                    "node": "Alerte erreur (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Calcul financier (delai paiement, previsions, anomalies)": {
+            "main": [
+                [{
+                        "node": "Envoyer le detail chiffre (Telegram)",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Redaction du briefing (Gemini)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [{
+                    "node": "Alerte erreur (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Envoyer le briefing (Telegram)": {
+            "main": [
+                [],
+                [{
+                    "node": "Alerte erreur (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Envoyer le detail chiffre (Telegram)": {
+            "main": [
+                [],
+                [{
+                    "node": "Alerte erreur (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Schedule Trigger - Lundi 8h": {
+            "main": [
+                [{
+                    "node": "Transactions bancaires",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Modele Gemini (Chat Model)": {
+            "ai_languageModel": [
+                [{
+                    "node": "Redaction du briefing (Gemini)",
+                    "type": "ai_languageModel",
+                    "index": 0
+                }]
+            ]
+        },
+        "Redaction du briefing (Gemini)": {
+            "main": [
+                [{
+                    "node": "Envoyer le briefing (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }],
+                [{
+                    "node": "Alerte erreur (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Solde bancaire de départ": {
+            "main": [
+                [{
+                    "node": "Calcul financier (delai paiement, previsions, anomalies)",
+                    "type": "main",
+                    "index": 0
+                }],
+                [{
+                    "node": "Alerte erreur (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        },
+        "Charges récurrentes": {
+            "main": [
+                [{
+                    "node": "Solde bancaire de départ",
+                    "type": "main",
+                    "index": 0
+                }],
+                [{
+                    "node": "Alerte erreur (Telegram)",
+                    "type": "main",
+                    "index": 0
+                }]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "executionOrder": "v1",
+        "timezone": "Europe/Paris",
+        "callerPolicy": "workflowsFromSameOwner",
+        "availableInMCP": false
+    },
+    "versionId": "fcff8f49-98ee-4718-b105-93aa094e35d4",
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "id": "KwSXorQuSwjsObSd",
+    "tags": []
+}

@@ -1,0 +1,6 @@
+libelle,categorie,montant,frequence,prochaine_echeance,intervalle_jours
+Loyer entrepot,Loyer,10500.00,trimestrielle,2026-10-08,91
+"Salaires (5 ETP, charges comprises)",Salaires,19000.00,mensuelle,2026-09-30,30
+Emprunts (vehicules + local),Emprunt,11600.00,mensuelle,2026-10-05,30
+Assurance professionnelle,Frais generaux,950.00,mensuelle,2026-10-10,30
+Abonnements logiciels (ERP/CRM/compta),Abonnements,620.00,mensuelle,2026-10-05,30

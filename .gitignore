@@ -1,0 +1,18 @@
+# Secrets et configuration locale
+.env
+.env.*
+!.env.example
+
+# Dépendances (si jamais installées localement, ex: tests du noeud Code)
+node_modules/
+__pycache__/
+*.pyc
+
+# Fichiers temporaires / système
+*.log
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Exports n8n non nettoyés (ne jamais committer un export brut avec credentials/IDs réels)
+workflow/*.raw.json
