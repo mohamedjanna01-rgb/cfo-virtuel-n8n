@@ -4,7 +4,7 @@ Workflow n8n de pilotage financier hebdomadaire pour une PME de négoce : chaque
 lundi à 8h, il lit les données comptables, calcule une prévision de trésorerie
 à 13 semaines, détecte les signaux d'alerte (retard de paiement client,
 dépense anormale, tension de trésorerie), fait rédiger un briefing par un LLM
-(Google Gemini) et l'envoie sur Telegram — avec un détail chiffré garanti
+(Google Gemini) et l'envoie sur Telegram avec un détail chiffré garanti
 exact en message séparé.
 
 Projet de démonstration construit sur une PME fictive ("Atlas Distribution",
@@ -16,7 +16,7 @@ réutilisables pour un client réel (voir [Adapter à un client réel](#adapter-
 **Tous les calculs financiers sont faits en JavaScript, dans un seul nœud
 Code.** Le LLM ne calcule jamais un chiffre : il reçoit un JSON déjà calculé
 et se contente de l'interpréter et de le mettre en mots. C'est ce qui rend le
-briefing fiable — si le LLM se trompe, il se trompe sur la formulation,
+briefing fiable si le LLM se trompe, il se trompe sur la formulation,
 jamais sur les montants.
 
 ## Architecture
@@ -56,7 +56,7 @@ les 2 envois Telegram) converge vers → Alerte erreur (Telegram)
 
 **Pourquoi les 5 lectures Google Sheets sont chaînées en série (pas en
 parallèle) :** en n8n, plusieurs nœuds connectés vers la même entrée ne
-s'attendent pas mutuellement — le nœud suivant démarre dès que la première
+s'attendent pas mutuellement le nœud suivant démarre dès que la première
 branche a livré ses données, sans garantie que les autres aient fini. D'où le
 chaînage strict + `executeOnce: true` sur chaque nœud Sheets (sinon, recevant
 les items du nœud précédent, il relirait sa feuille une fois par item reçu).
@@ -88,7 +88,7 @@ paramètres des 3 nœuds Telegram.
      (demandez-le à [@get_id_bot](https://t.me/get_id_bot) sur Telegram).
    - Les **9 nœuds concernés** (5 Sheets + 3 Telegram + 1 Gemini) : le
      sélecteur de credential est vide après import (normal, aucune clé n'est
-     exportée) — attacher vos propres credentials, voir tableau ci-dessous.
+     exportée)  attacher vos propres credentials, voir tableau ci-dessous.
 
 ## Source de données : le Google Sheet
 
@@ -125,7 +125,7 @@ prévisions, anomalies)` :
 | `FENETRE_ANOMALIE_DEPENSE_JOURS` | N'afficher que les dépenses anormales des N derniers jours | 30 |
 | `CATEGORIES_ANOMALIE_DEPENSES` | Catégories analysées pour la détection de dépenses anormales | Frais généraux, Loyer, Salaires, Emprunt, Abonnements |
 
-**1. Retard moyen après échéance** — nombre de jours entre l'échéance d'une
+**1. Retard moyen après échéance** nombre de jours entre l'échéance d'une
 facture et son paiement réel (ou, si elle est encore ouverte et déjà en
 retard, entre l'échéance et aujourd'hui). Calculé globalement et par client,
 sur une fenêtre glissante de 3 mois comparée aux 3 mois précédents. **Ce
@@ -134,7 +134,7 @@ jours) : ce ratio mélange volume de vente et vitesse de paiement, ce qui
 produit un chiffre qui se lit mal à l'oral et peut sembler contredire un
 "retard moyen" mesuré autrement. Un seul indicateur, une seule lecture.
 
-**2. Prévision de trésorerie à 13 semaines** — solde actuel (solde
+**2. Prévision de trésorerie à 13 semaines** solde actuel (solde
 d'ouverture + somme des transactions bancaires) projeté semaine par semaine :
 encaissements attendus (factures clients ouvertes, échéance ajustée du
 retard moyen récent du client concerné), décaissements fournisseurs
@@ -184,7 +184,7 @@ erreur (Telegram)**. Ce nœud :
   [`demo-data/ANOMALIES.md`](demo-data/ANOMALIES.md) pour le détail de ce
   choix (Option A validée en Phase 2 : pas d'extrapolation de CA futur).
 - **Détection d'anomalies de dépense** : nécessite au moins 5 transactions
-  dans une catégorie pour constituer une base statistique — une catégorie
+  dans une catégorie pour constituer une base statistique une catégorie
   trop peu utilisée ne sera jamais analysée.
 - **Alerte erreur** : ne rapporte qu'un seul nœud en échec par exécution (voir
   ci-dessus).
