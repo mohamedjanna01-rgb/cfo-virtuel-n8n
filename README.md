@@ -88,7 +88,7 @@ paramètres des 3 nœuds Telegram.
      (demandez-le à [@get_id_bot](https://t.me/get_id_bot) sur Telegram).
    - Les **9 nœuds concernés** (5 Sheets + 3 Telegram + 1 Gemini) : le
      sélecteur de credential est vide après import (normal, aucune clé n'est
-     exportée)  attacher vos propres credentials, voir tableau ci-dessous.
+     exportée) attacher vos propres credentials, voir tableau ci-dessous.
 
 ## Source de données : le Google Sheet
 
